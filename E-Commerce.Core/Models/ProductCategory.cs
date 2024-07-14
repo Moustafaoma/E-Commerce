@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace E_Commerce.Core.Models
 {
-	public class ProductCategory
+	public class ProductCategory:BaseModel
 	{
 		public string Name { get; set; }
 
