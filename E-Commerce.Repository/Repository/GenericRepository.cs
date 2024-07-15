@@ -17,12 +17,30 @@ namespace E_Commerce.Repository.Repository
         {
             _context = context;
         }
-        public async Task <IEnumerable<T>> GetAllAsync()=>
-			 await _context.Set<T>().AsNoTracking().ToListAsync();
+        public async Task <IEnumerable<T>> GetAllAsync()
+		{
+			//Implemented with Specification pattern
+			if (typeof(T) == typeof(Product))
+			{
+				return (IEnumerable<T>)await _context.Set<Product>()
+					.Include(p => p.Brand)
+					.Include(p => p.Category)
+					.AsNoTracking()
+					.ToListAsync();
+			}
+			return await _context.Set<T>().AsNoTracking().ToListAsync();
+			 
+		}
 		
 
-		public async Task<T?> GetByIdAsync(int id)=>
-			await _context.Set<T>().FindAsync(id);
+		public async Task<T?> GetByIdAsync(int id)
+		{
+			if(typeof(T) == typeof(Product))
+			{
+				return  await _context.Set<Product>().Include(p=>p.Brand).Include(p=>p.Category).FirstOrDefaultAsync(p=>p.Id==id) as T;
+			}
+		 	return await _context.Set<T>().FindAsync(id);
+		}
 
 	}
 }

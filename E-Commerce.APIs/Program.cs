@@ -1,4 +1,7 @@
+using E_Commerce.Core.Models;
+using E_Commerce.Core.Repository.Contract;
 using E_Commerce.Repository.Data;
+using E_Commerce.Repository.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +23,7 @@ namespace E_Commerce.APIs
 
 			   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnections"))
 			   );
+			builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 			var app = builder.Build();
 			using (var scope = app.Services.CreateScope())
