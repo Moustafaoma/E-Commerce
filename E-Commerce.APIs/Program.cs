@@ -33,6 +33,7 @@ namespace E_Commerce.APIs
 				try
 				{
 					await context.Database.MigrateAsync();
+					await StoreContextSeed.SeedAsync(context);
 
 				}
 				catch (Exception ex)
