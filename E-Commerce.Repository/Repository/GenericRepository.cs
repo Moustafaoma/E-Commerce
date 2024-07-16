@@ -1,5 +1,6 @@
 ﻿using E_Commerce.Core.Models;
 using E_Commerce.Core.Repository.Contract;
+using E_Commerce.Core.Specifications;
 using E_Commerce.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,30 +18,34 @@ namespace E_Commerce.Repository.Repository
         {
             _context = context;
         }
-        public async Task <IEnumerable<T>> GetAllAsync()
-		{
-			//Implemented with Specification pattern
-			if (typeof(T) == typeof(Product))
-			{
-				return (IEnumerable<T>)await _context.Set<Product>()
-					.Include(p => p.Brand)
-					.Include(p => p.Category)
-					.AsNoTracking()
-					.ToListAsync();
-			}
-			return await _context.Set<T>().AsNoTracking().ToListAsync();
-			 
-		}
+		public async Task<IEnumerable<T>> GetAllAsync() =>
+			await _context.Set<T>().AsNoTracking().ToListAsync();	
 		
-
 		public async Task<T?> GetByIdAsync(int id)
 		{
-			if(typeof(T) == typeof(Product))
-			{
-				return  await _context.Set<Product>().Include(p=>p.Brand).Include(p=>p.Category).FirstOrDefaultAsync(p=>p.Id==id) as T;
-			}
+			//if(typeof(T) == typeof(Product))
+			//{
+			//	return  await _context.Set<Product>().Include(p=>p.Brand).Include(p=>p.Category).FirstOrDefaultAsync(p=>p.Id==id) as T;
+			//}
 		 	return await _context.Set<T>().FindAsync(id);
 		}
+		public async Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecification<T> specification)=>
+		await ApplySpecifications(specification).AsNoTracking().ToListAsync();
+		
+		public async Task<T?> GetByIdWithSpecAsync(ISpecification<T> specification)
+		{
+			//if(typeof(T) == typeof(Product))
+			//{
+			//	return  await _context.Set<Product>().Include(p=>p.Brand).Include(p=>p.Category).FirstOrDefaultAsync(p=>p.Id==id) as T;
+			//}
+			return await ApplySpecifications(specification).FirstOrDefaultAsync();  
+		}
+		private IQueryable<T> ApplySpecifications(ISpecification<T> specification)
+		{
+			return SpecificationEvulator<T>.GetQuery(_context.Set<T>(), specification);
+		}
+
+
 
 	}
 }
