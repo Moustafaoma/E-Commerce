@@ -1,4 +1,5 @@
 ﻿using E_Commerce.Core.Models;
+using E_Commerce.Core.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace E_Commerce.Core.Repository.Contract
 	public interface IGenericRepository<T> where T : BaseModel
 	{
 		 Task<IEnumerable<T>> GetAllAsync();
-		Task<T?> GetByIdAsync(int id);	
+		Task<T?> GetByIdAsync(int id);
+		public  Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecification<T> specification);
+		public Task<T?> GetByIdWithSpecAsync(ISpecification<T> specification);
 	}
 }
