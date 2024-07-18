@@ -25,7 +25,10 @@ namespace E_Commerce.APIs
 			   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnections"))
 			   );
 			builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-			builder.Services.AddAutoMapper(typeof(MappingProfiles));
+			builder.Services.AddAutoMapper(cfg =>
+			{
+				cfg.AddProfile(new MappingProfiles(builder.Configuration));
+			});
 
 			var app = builder.Build();
 			using (var scope = app.Services.CreateScope())
