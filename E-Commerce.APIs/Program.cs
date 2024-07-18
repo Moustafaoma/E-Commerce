@@ -1,3 +1,4 @@
+using E_Commerce.APIs.Helpers;
 using E_Commerce.Core.Models;
 using E_Commerce.Core.Repository.Contract;
 using E_Commerce.Repository.Data;
@@ -24,6 +25,7 @@ namespace E_Commerce.APIs
 			   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnections"))
 			   );
 			builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+			builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
 			var app = builder.Build();
 			using (var scope = app.Services.CreateScope())
