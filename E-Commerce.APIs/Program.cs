@@ -1,9 +1,11 @@
+using E_Commerce.APIs.Errors;
 using E_Commerce.APIs.Helpers;
 using E_Commerce.Core.Models;
 using E_Commerce.Core.Repository.Contract;
 using E_Commerce.Repository.Data;
 using E_Commerce.Repository.Repository;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace E_Commerce.APIs
@@ -29,7 +31,24 @@ namespace E_Commerce.APIs
 			{
 				cfg.AddProfile(new MappingProfiles(builder.Configuration));
 			});
+			builder.Services.Configure<ApiBehaviorOptions>(options =>
+			{
+				options.InvalidModelStateResponseFactory = (actionContext) =>
+				{
+					var errors = actionContext.ModelState.Where(p => p.Value.Errors.Count() > 0)
+														.SelectMany(p => p.Value.Errors)
+														.Select(E => E.ErrorMessage)
+														.ToList();
+					var response = new ApiResponseValidation()
+					{
+						Errors = errors
+					};
+					return new BadRequestObjectResult(response);
 
+				};
+
+			}
+			);
 			var app = builder.Build();
 			using (var scope = app.Services.CreateScope())
 			{
