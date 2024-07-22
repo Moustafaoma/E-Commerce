@@ -1,5 +1,6 @@
 using E_Commerce.APIs.Errors;
 using E_Commerce.APIs.Helpers;
+using E_Commerce.APIs.MiddleWares;
 using E_Commerce.Core.Models;
 using E_Commerce.Core.Repository.Contract;
 using E_Commerce.Repository.Data;
@@ -72,6 +73,8 @@ namespace E_Commerce.APIs
 			}
 
 			// Configure the HTTP request pipeline.
+			app.UseMiddleware<ExceptionMiddleWare>();
+
 			if (app.Environment.IsDevelopment())
 			{
 				app.UseSwagger();

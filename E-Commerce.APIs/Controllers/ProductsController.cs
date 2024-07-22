@@ -33,8 +33,6 @@ namespace E_Commerce.APIs.Controllers
 		[HttpGet("{id}")]
 		public async Task<ActionResult<ProductToReturnDto>> GetProductAsync(int? id)
 		{
-			if (id == null)
-				return new BadRequestResult();
 			var spec = new ProductWithBrandAndCategorySpecfications(p=>p.Id==id);
 			var product = await _productRepo.GetByIdWithSpecAsync(spec);
 			if (product is null)
