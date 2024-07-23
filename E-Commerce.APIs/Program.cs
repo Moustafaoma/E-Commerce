@@ -80,7 +80,7 @@ namespace E_Commerce.APIs
 				app.UseSwagger();
 				app.UseSwaggerUI();
 			}
-
+			app.UseStatusCodePagesWithReExecute("/errors/{0}");
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 
@@ -88,6 +88,8 @@ namespace E_Commerce.APIs
 
 
 			app.MapControllers();
+		
+
 
 			app.Run();
 		}
