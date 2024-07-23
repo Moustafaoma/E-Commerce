@@ -22,6 +22,9 @@ namespace E_Commerce.APIs.Controllers
 			_mapper = mapper;
 		}
 		[HttpGet]
+		[ProducesResponseType(typeof(ProductToReturnDto),StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+
 		public async Task<ActionResult<IEnumerable<ProductToReturnDto>>> GetAllProductsAsync()
 		{
 			var spec=new ProductWithBrandAndCategorySpecfications();
@@ -31,6 +34,8 @@ namespace E_Commerce.APIs.Controllers
 			return Ok(_mapper.Map<IEnumerable<Product>,IEnumerable<ProductToReturnDto>>(products));
 		}
 		[HttpGet("{id}")]
+		[ProducesResponseType(typeof(ProductToReturnDto), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<ProductToReturnDto>> GetProductAsync(int? id)
 		{
 			var spec = new ProductWithBrandAndCategorySpecfications(p=>p.Id==id);
