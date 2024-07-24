@@ -1,4 +1,5 @@
 using E_Commerce.APIs.Errors;
+using E_Commerce.APIs.Extensions;
 using E_Commerce.APIs.Helpers;
 using E_Commerce.APIs.MiddleWares;
 using E_Commerce.Core.Models;
@@ -21,35 +22,17 @@ namespace E_Commerce.APIs
 
 			builder.Services.AddControllers();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-			builder.Services.AddEndpointsApiExplorer();
-			builder.Services.AddSwaggerGen();
+			builder.Services.AddSwaggerServices();
 			builder.Services.AddDbContext<StoreDbContext>(options =>
 
 			   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnections"))
 			   );
-			builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-			builder.Services.AddAutoMapper(cfg =>
-			{
-				cfg.AddProfile(new MappingProfiles(builder.Configuration));
-			});
-			builder.Services.Configure<ApiBehaviorOptions>(options =>
-			{
-				options.InvalidModelStateResponseFactory = (actionContext) =>
-				{
-					var errors = actionContext.ModelState.Where(p => p.Value.Errors.Count() > 0)
-														.SelectMany(p => p.Value.Errors)
-														.Select(E => E.ErrorMessage)
-														.ToList();
-					var response = new ApiResponseValidation()
-					{
-						Errors = errors
-					};
-					return new BadRequestObjectResult(response);
-
-				};
-
-			}
-			);
+			
+			builder.Services.AddApplicationServices(builder.Configuration);
+			//builder.Services.AddAutoMapper(cfg =>
+			//{
+			//	cfg.AddProfile(new MappingProfiles(builder.Configuration));
+			//});
 			var app = builder.Build();
 			using (var scope = app.Services.CreateScope())
 			{
@@ -77,8 +60,7 @@ namespace E_Commerce.APIs
 
 			if (app.Environment.IsDevelopment())
 			{
-				app.UseSwagger();
-				app.UseSwaggerUI();
+				app.UseSwaggerMiddlWares();
 			}
 			app.UseStatusCodePagesWithReExecute("/errors/{0}");
 			app.UseHttpsRedirection();

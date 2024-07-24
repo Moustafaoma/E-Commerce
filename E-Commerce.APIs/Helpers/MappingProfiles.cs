@@ -6,6 +6,8 @@ using E_Commerce.Core.Models;
 public class MappingProfiles:Profile
 {
 	private readonly string _baseImageUrl;
+
+	
 	public MappingProfiles(IConfiguration configuration)
 	{
 		_baseImageUrl = configuration["applicationUrl"];
