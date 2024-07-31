@@ -29,10 +29,7 @@ namespace E_Commerce.APIs
 			   );
 			
 			builder.Services.AddApplicationServices(builder.Configuration);
-			//builder.Services.AddAutoMapper(cfg =>
-			//{
-			//	cfg.AddProfile(new MappingProfiles(builder.Configuration));
-			//});
+
 			var app = builder.Build();
 			using (var scope = app.Services.CreateScope())
 			{

@@ -14,12 +14,21 @@ namespace E_Commerce.APIs.Controllers
 	public class ProductsController : BaseApiController
 	{
 		private readonly IGenericRepository<Product> _productRepo;
-		private readonly IMapper _mapper;
+        private readonly IGenericRepository<ProductBrand> _brandRepo;
+        private readonly IGenericRepository<ProductCategory> _categoryRepo;
 
-		public ProductsController(IGenericRepository<Product> productRepo, IMapper mapper)
+        private readonly IMapper _mapper;
+
+		public ProductsController(IGenericRepository<Product> productRepo, IMapper mapper
+			,IGenericRepository<ProductBrand> brandRepo, IGenericRepository<ProductCategory> categoryRepo
+
+
+            )
 		{
 			_productRepo = productRepo;
 			_mapper = mapper;
+			_brandRepo = brandRepo;
+			_categoryRepo = categoryRepo;
 		}
 		[HttpGet]
 		[ProducesResponseType(typeof(ProductToReturnDto),StatusCodes.Status200OK)]
@@ -44,5 +53,24 @@ namespace E_Commerce.APIs.Controllers
 				return NotFound(new ApiResponse(404));
 			return Ok(_mapper.Map<Product,ProductToReturnDto>(product));
 		}
+		[HttpGet("brands")]
+        [ProducesResponseType(typeof(ProductBrand), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+
+        public async Task<ActionResult<ProductBrand>> GetAllBrandsAsync()
+		{
+			var brands=await _brandRepo.GetAllAsync();
+			return Ok(brands);
+		}
+		[HttpGet("Categories")]
+        [ProducesResponseType(typeof(ProductCategory), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+
+        public async Task<ActionResult<ProductCategory>> GetAllCategories()
+		{
+			var categories=await _categoryRepo.GetAllAsync();
+			return Ok(categories);
+		}
+
     }
 }
