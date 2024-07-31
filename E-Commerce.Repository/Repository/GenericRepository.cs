@@ -18,7 +18,7 @@ namespace E_Commerce.Repository.Repository
         {
             _context = context;
         }
-		public async Task<IEnumerable<T>> GetAllAsync() =>
+		public async Task<IReadOnlyList<T>> GetAllAsync() =>
 			await _context.Set<T>().AsNoTracking().ToListAsync();	
 		
 		public async Task<T?> GetByIdAsync(int id)
@@ -29,7 +29,7 @@ namespace E_Commerce.Repository.Repository
 			//}
 		 	return await _context.Set<T>().FindAsync(id);
 		}
-		public async Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecification<T> specification)=>
+		public async Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecification<T> specification)=>
 		await ApplySpecifications(specification).AsNoTracking().ToListAsync();
 		
 		public async Task<T?> GetByIdWithSpecAsync(ISpecification<T> specification)

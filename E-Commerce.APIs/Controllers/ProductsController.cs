@@ -34,7 +34,7 @@ namespace E_Commerce.APIs.Controllers
 		[ProducesResponseType(typeof(ProductToReturnDto),StatusCodes.Status200OK)]
 		[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
 
-		public async Task<ActionResult<IEnumerable<ProductToReturnDto>>> GetAllProductsAsync()
+		public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetAllProductsAsync()
 		{
 			var spec=new ProductWithBrandAndCategorySpecfications();
 			var products = await _productRepo.GetAllWithSpecAsync(spec);
@@ -57,7 +57,7 @@ namespace E_Commerce.APIs.Controllers
         [ProducesResponseType(typeof(ProductBrand), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
 
-        public async Task<ActionResult<ProductBrand>> GetAllBrandsAsync()
+        public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetAllBrandsAsync()
 		{
 			var brands=await _brandRepo.GetAllAsync();
 			return Ok(brands);
@@ -66,7 +66,7 @@ namespace E_Commerce.APIs.Controllers
         [ProducesResponseType(typeof(ProductCategory), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
 
-        public async Task<ActionResult<ProductCategory>> GetAllCategories()
+        public async Task<ActionResult<IReadOnlyList<ProductCategory>>> GetAllCategories()
 		{
 			var categories=await _categoryRepo.GetAllAsync();
 			return Ok(categories);

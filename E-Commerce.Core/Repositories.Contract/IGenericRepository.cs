@@ -10,9 +10,9 @@ namespace E_Commerce.Core.Repository.Contract
 {
 	public interface IGenericRepository<T> where T : BaseModel
 	{
-		 Task<IEnumerable<T>> GetAllAsync();
+		 Task<IReadOnlyList<T>> GetAllAsync();
 		Task<T?> GetByIdAsync(int id);
-		public  Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecification<T> specification);
+		public  Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecification<T> specification);
 		public Task<T?> GetByIdWithSpecAsync(ISpecification<T> specification);
 	}
 }
