@@ -10,9 +10,26 @@ namespace E_Commerce.Core.Specifications.Product_Specifications
 {
 	public class ProductWithBrandAndCategorySpecfications:BaseSpecification<Product>
 	{
-        public ProductWithBrandAndCategorySpecfications():base()
+        public ProductWithBrandAndCategorySpecfications(string? sort):base()
         {
-			AddIncludes();
+            AddIncludes();
+            if (!string.IsNullOrEmpty(sort))
+			{
+				switch (sort)
+				{
+					case "priceAsc":
+						AddOrderBy(p => p.Price);
+						break;
+                    case "priceDesc":
+                        AddOrderByDesc(p => p.Price);
+                        break;
+					default:
+                        AddOrderBy(p => p.Name);
+                        break;
+                }
+			}
+			else
+				AddOrderBy(p=>p.Name);
 		}
         public ProductWithBrandAndCategorySpecfications(Expression<Func<Product,bool>> criteria):base(criteria)
         {

@@ -34,9 +34,9 @@ namespace E_Commerce.APIs.Controllers
 		[ProducesResponseType(typeof(ProductToReturnDto),StatusCodes.Status200OK)]
 		[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
 
-		public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetAllProductsAsync()
+		public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetAllProductsAsync(string ?sort=null)
 		{
-			var spec=new ProductWithBrandAndCategorySpecfications();
+			var spec=new ProductWithBrandAndCategorySpecfications(sort);
 			var products = await _productRepo.GetAllWithSpecAsync(spec);
 			if (products is null)
 				return NotFound(new ApiResponse(404));

@@ -16,6 +16,10 @@ namespace E_Commerce.Repository
 			var query = querySequence;
 			if (spec.Criteria is not null)
 				query = query.Where(spec.Criteria);
+			if(spec.OrderBy is not null)
+				query = query.OrderBy(spec.OrderBy);
+			else if (spec.OrderByDesc is not null)
+				query=query.OrderByDescending(spec.OrderByDesc);
 			foreach (var include in spec.Includes)
 			{
 				query=query.Include(include); 
