@@ -10,18 +10,18 @@ namespace E_Commerce.Core.Specifications.Product_Specifications
 {
 	public class ProductWithBrandAndCategorySpecfications:BaseSpecification<Product>
 	{
-        public ProductWithBrandAndCategorySpecfications(string? sort,int?brandId,int?categoryId ):base(
+        public ProductWithBrandAndCategorySpecfications(ProductSpecParams specParams ):base(
 			
 			p=>
-			(!brandId.HasValue||p.BrandId==brandId)&&
-			(!categoryId.HasValue||p.CategoryId==categoryId)
+			(!specParams.BrandId.HasValue||p.BrandId==specParams.BrandId)&&
+			(!specParams.CategoryId.HasValue || p.CategoryId == specParams.CategoryId)
 			
 			)
         {
             AddIncludes();
-            if (!string.IsNullOrEmpty(sort))
+            if (!string.IsNullOrEmpty(specParams.Sort))
 			{
-				switch (sort)
+				switch (specParams.Sort)
 				{
 					case "priceAsc":
 						AddOrderBy(p => p.Price);
@@ -36,6 +36,8 @@ namespace E_Commerce.Core.Specifications.Product_Specifications
 			}
 			else
 				AddOrderBy(p=>p.Name);
+		
+			ApplyPagination(( specParams.PageIndex - 1) *specParams.PageSize, specParams.PageSize);
 		}
         public ProductWithBrandAndCategorySpecfications(Expression<Func<Product,bool>> criteria):base(criteria)
         {

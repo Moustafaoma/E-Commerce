@@ -10,7 +10,7 @@ namespace E_Commerce.Core.Specifications.Product_Specifications
     public class ProductSpecParams
     {
         private const int MaxPageSize = 10;
-        private int _pageSize = MaxPageSize;
+        private int _pageSize = 5;
 
         public int PageSize
         {
@@ -20,7 +20,7 @@ namespace E_Commerce.Core.Specifications.Product_Specifications
                 _pageSize = value > MaxPageSize ? MaxPageSize : value;
             }
         }
-
+        public int PageIndex { get; set; } = 1;
         public string? Sort { get; set; }
         public int? BrandId { get; set; }
         public int? CategoryId { get; set; }

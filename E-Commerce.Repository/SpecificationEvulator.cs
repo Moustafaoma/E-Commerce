@@ -20,6 +20,8 @@ namespace E_Commerce.Repository
 				query = query.OrderBy(spec.OrderBy);
 			else if (spec.OrderByDesc is not null)
 				query=query.OrderByDescending(spec.OrderByDesc);
+			if(spec.IsPaginationEnable)
+				query=query.Skip(spec.Skip).Take(spec.Take);
 			foreach (var include in spec.Includes)
 			{
 				query=query.Include(include); 
