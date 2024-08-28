@@ -10,7 +10,13 @@ namespace E_Commerce.Core.Specifications.Product_Specifications
 {
 	public class ProductWithBrandAndCategorySpecfications:BaseSpecification<Product>
 	{
-        public ProductWithBrandAndCategorySpecfications(string? sort):base()
+        public ProductWithBrandAndCategorySpecfications(string? sort,int?brandId,int?categoryId ):base(
+			
+			p=>
+			(!brandId.HasValue||p.BrandId==brandId)&&
+			(!categoryId.HasValue||p.CategoryId==categoryId)
+			
+			)
         {
             AddIncludes();
             if (!string.IsNullOrEmpty(sort))
