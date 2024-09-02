@@ -40,12 +40,15 @@ namespace E_Commerce.Repository.Repository
 			//}
 			return await ApplySpecifications(specification).FirstOrDefaultAsync();  
 		}
-		private IQueryable<T> ApplySpecifications(ISpecification<T> specification)
+        public async Task<int> GetCountAsync(ISpecification<T> specification)
+        {
+			return await ApplySpecifications(specification).CountAsync();
+        }
+        private IQueryable<T> ApplySpecifications(ISpecification<T> specification)
 		{
 			return SpecificationEvulator<T>.GetQuery(_context.Set<T>(), specification);
 		}
 
-
-
-	}
+        
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using E_Commerce.APIs.DTOs;
 using E_Commerce.APIs.Errors;
+using E_Commerce.APIs.Helpers;
 using E_Commerce.Core.Models;
 using E_Commerce.Core.Repository.Contract;
 using E_Commerce.Core.Specifications;
@@ -34,14 +35,21 @@ namespace E_Commerce.APIs.Controllers
 		[ProducesResponseType(typeof(ProductToReturnDto),StatusCodes.Status200OK)]
 		[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
 
-		public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetAllProductsAsync([FromQuery] ProductSpecParams specParams)
+		public async Task<ActionResult<IReadOnlyList<Pagination<ProductToReturnDto>>>> GetAllProductsAsync([FromQuery] ProductSpecParams specParams)
 		{
 			var spec=new ProductWithBrandAndCategorySpecfications(specParams);
 			var products = await _productRepo.GetAllWithSpecAsync(spec);
 			if (products is null)
 				return NotFound(new ApiResponse(404));
-			return Ok(_mapper.Map<IEnumerable<Product>,IEnumerable<ProductToReturnDto>>(products));
-		}
+			var data=_mapper.Map<IReadOnlyList<Product>,IReadOnlyList<ProductToReturnDto>>(products);
+
+			var countSpec=new ProductWithFilterationForCountSpec(specParams);
+
+			var count= await _productRepo.GetCountAsync(countSpec);
+			 
+			return Ok (new Pagination<ProductToReturnDto>(specParams.PageSize, specParams.PageIndex
+                , count, data));
+        }
 		[HttpGet("{id}")]
 		[ProducesResponseType(typeof(ProductToReturnDto), StatusCodes.Status200OK)]
 		[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]

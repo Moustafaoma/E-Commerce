@@ -13,6 +13,7 @@ namespace E_Commerce.Core.Repository.Contract
 		 Task<IReadOnlyList<T>> GetAllAsync();
 		Task<T?> GetByIdAsync(int id);
 		public  Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecification<T> specification);
-		public Task<T?> GetByIdWithSpecAsync(ISpecification<T> specification);
+		 Task<T?> GetByIdWithSpecAsync(ISpecification<T> specification);
+		 Task<int> GetCountAsync(ISpecification<T> specification);
 	}
 }
