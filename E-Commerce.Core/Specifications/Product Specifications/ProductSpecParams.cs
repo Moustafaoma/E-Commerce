@@ -21,6 +21,7 @@ namespace E_Commerce.Core.Specifications.Product_Specifications
             }
         }
         public int PageIndex { get; set; } = 1;
+        public string? Search { get; set; }
         public string? Sort { get; set; }
         public int? BrandId { get; set; }
         public int? CategoryId { get; set; }

@@ -14,7 +14,8 @@ namespace E_Commerce.Core.Specifications.Product_Specifications
 			
 			p=>
 			(!specParams.BrandId.HasValue||p.BrandId==specParams.BrandId)&&
-			(!specParams.CategoryId.HasValue || p.CategoryId == specParams.CategoryId)
+			(!specParams.CategoryId.HasValue || p.CategoryId == specParams.CategoryId)&&
+			(string.IsNullOrEmpty(specParams.Search))||p.Name.ToLower().Contains(specParams.Search.ToLower())
 			
 			)
         {
