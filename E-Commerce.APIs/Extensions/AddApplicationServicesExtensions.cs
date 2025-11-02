@@ -1,6 +1,8 @@
 ﻿using E_Commerce.APIs.Errors;
 using E_Commerce.APIs.Helpers;
+using E_Commerce.Core.Repositories.Contract;
 using E_Commerce.Core.Repository.Contract;
+using E_Commerce.Repository.Basket_Repository;
 using E_Commerce.Repository.Repository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +13,8 @@ namespace E_Commerce.APIs.Extensions
 		public static IServiceCollection AddApplicationServices(this IServiceCollection services,IConfiguration? configuration)
 		{
 			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+			services.AddScoped<IBasketRepository, BasketRepository>();
+
 			#region This dependences on configuration
 			if (configuration is not null)
 			{

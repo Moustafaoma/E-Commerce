@@ -9,6 +9,7 @@ using E_Commerce.Repository.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace E_Commerce.APIs
 {
@@ -29,6 +30,12 @@ namespace E_Commerce.APIs
 			   );
 			
 			builder.Services.AddApplicationServices(builder.Configuration);
+			builder.Services.AddScoped<IConnectionMultiplexer>(sp =>
+			{
+				var configuration = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"), true);
+				return ConnectionMultiplexer.Connect(configuration);
+			});
+
 
 			var app = builder.Build();
 			using (var scope = app.Services.CreateScope())
